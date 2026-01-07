@@ -1002,6 +1002,76 @@
             font-style: italic;
         }
 
+        .hotspot-popup-coords {
+            font-size: 0.5rem;
+            color: #0a6050;
+            padding: 0 1rem 0.5rem;
+            font-family: 'SF Mono', monospace;
+        }
+
+        .hotspot-popup-desc {
+            padding: 0.6rem 1rem;
+            font-size: 0.6rem;
+            color: #aaccbb;
+            line-height: 1.5;
+            border-bottom: 1px solid #0a3020;
+        }
+
+        .hotspot-popup-meta {
+            padding: 0.5rem 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.4rem;
+            border-bottom: 1px solid #0a3020;
+        }
+
+        .hotspot-popup-meta-item {
+            font-size: 0.5rem;
+        }
+
+        .hotspot-popup-meta-label {
+            color: #0a6050;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: block;
+            margin-bottom: 0.1rem;
+        }
+
+        .hotspot-popup-meta-value {
+            color: #00ff88;
+        }
+
+        .hotspot-popup-agencies {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #0a3020;
+        }
+
+        .hotspot-popup-agencies-title {
+            font-size: 0.45rem;
+            color: #0a6050;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+        }
+
+        .hotspot-popup-agency {
+            display: inline-block;
+            font-size: 0.5rem;
+            padding: 0.1rem 0.3rem;
+            margin: 0.1rem 0.15rem 0.1rem 0;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            color: #00cc77;
+        }
+
+        .hotspot-popup-headlines-title {
+            font-size: 0.45rem;
+            color: #0a6050;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.4rem 1rem 0.2rem;
+        }
+
         .hotspot-popup-close {
             position: absolute;
             top: 0.5rem;
@@ -2313,6 +2383,205 @@
         @keyframes conflict-label-pulse-high {
             0%, 100% { opacity: 0.9; box-shadow: 0 0 15px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(255, 0, 0, 0.2); }
             50% { opacity: 1; box-shadow: 0 0 25px rgba(255, 0, 0, 0.7), inset 0 0 15px rgba(255, 0, 0, 0.3); }
+        }
+
+        /* Conflict Zone Popup */
+        .conflict-popup {
+            display: none;
+            position: absolute;
+            z-index: 100;
+            background: rgba(20, 5, 5, 0.98);
+            border: 1px solid #ff3333;
+            min-width: 320px;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 50, 50, 0.2);
+            pointer-events: auto;
+        }
+
+        .conflict-popup.visible {
+            display: block;
+        }
+
+        .conflict-popup-header {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 50, 50, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 50, 50, 0.1);
+        }
+
+        .conflict-popup-title {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #ff4444;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .conflict-popup-intensity {
+            font-size: 0.55rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 2px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .conflict-popup-intensity.high {
+            background: #ff0000;
+            color: #fff;
+            animation: pulse-level 1s infinite;
+        }
+        .conflict-popup-intensity.medium {
+            background: #ff6600;
+            color: #fff;
+        }
+        .conflict-popup-intensity.watch {
+            background: #ffcc00;
+            color: #000;
+        }
+
+        .conflict-popup-meta {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid rgba(255, 50, 50, 0.2);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .conflict-popup-meta-item {
+            font-size: 0.55rem;
+        }
+
+        .conflict-popup-meta-label {
+            color: #884444;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: block;
+            margin-bottom: 0.15rem;
+        }
+
+        .conflict-popup-meta-value {
+            color: #ff8888;
+        }
+
+        .conflict-popup-desc {
+            padding: 0.75rem 1rem;
+            font-size: 0.65rem;
+            color: #ccaaaa;
+            line-height: 1.5;
+            border-bottom: 1px solid rgba(255, 50, 50, 0.2);
+        }
+
+        .conflict-popup-parties {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid rgba(255, 50, 50, 0.2);
+        }
+
+        .conflict-popup-parties-title {
+            font-size: 0.5rem;
+            color: #884444;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.4rem;
+        }
+
+        .conflict-popup-party {
+            display: inline-block;
+            font-size: 0.55rem;
+            padding: 0.15rem 0.4rem;
+            margin: 0.15rem 0.2rem 0.15rem 0;
+            background: rgba(255, 50, 50, 0.2);
+            border: 1px solid rgba(255, 50, 50, 0.3);
+            color: #ff8888;
+        }
+
+        .conflict-popup-events {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid rgba(255, 50, 50, 0.2);
+        }
+
+        .conflict-popup-events-title {
+            font-size: 0.5rem;
+            color: #884444;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.4rem;
+        }
+
+        .conflict-popup-event {
+            font-size: 0.55rem;
+            color: #ff8888;
+            padding: 0.2rem 0;
+            padding-left: 0.75rem;
+            position: relative;
+        }
+
+        .conflict-popup-event::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #ff4444;
+        }
+
+        .conflict-popup-headlines {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .conflict-popup-headlines-title {
+            font-size: 0.5rem;
+            color: #884444;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.5rem 1rem 0.3rem;
+        }
+
+        .conflict-popup-headline {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 50, 50, 0.15);
+            font-size: 0.6rem;
+            color: #ccaaaa;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .conflict-popup-headline:hover {
+            background: rgba(255, 50, 50, 0.15);
+        }
+
+        .conflict-popup-headline a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .conflict-popup-headline a:hover {
+            color: #ff8888;
+        }
+
+        .conflict-popup-headline-source {
+            font-size: 0.45rem;
+            color: #884444;
+            text-transform: uppercase;
+            margin-bottom: 0.15rem;
+        }
+
+        .conflict-popup-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: none;
+            border: none;
+            color: #884444;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .conflict-popup-close:hover {
+            color: #ff4444;
         }
 
         /* Military Base Markers */
@@ -4424,19 +4693,90 @@
 
         // Intelligence hotspots with coordinates (x%, y% on map)
         const INTEL_HOTSPOTS = [
-            { id: 'dc', name: 'DC', subtext: 'Pentagon Pizza Index', lat: 38.9, lon: -77.0, keywords: ['pentagon', 'white house', 'washington', 'us military', 'cia', 'nsa', 'biden', 'trump'] },
-            { id: 'moscow', name: 'Moscow', subtext: 'Kremlin Activity', lat: 55.75, lon: 37.6, keywords: ['russia', 'putin', 'kremlin', 'moscow', 'russian'] },
-            { id: 'beijing', name: 'Beijing', subtext: 'PLA/MSS Activity', lat: 39.9, lon: 116.4, keywords: ['china', 'beijing', 'chinese', 'xi jinping', 'taiwan strait', 'pla'] },
-            { id: 'kyiv', name: 'Kyiv', subtext: 'Conflict Zone', lat: 50.45, lon: 30.5, keywords: ['ukraine', 'kyiv', 'zelensky', 'ukrainian', 'donbas', 'crimea'] },
-            { id: 'taipei', name: 'Taipei', subtext: 'Strait Watch', lat: 25.03, lon: 121.5, keywords: ['taiwan', 'taipei', 'taiwanese', 'strait'] },
-            { id: 'tehran', name: 'Tehran', subtext: 'IRGC Activity', lat: 35.7, lon: 51.4, keywords: ['iran', 'tehran', 'iranian', 'irgc', 'hezbollah', 'nuclear'] },
-            { id: 'jerusalem', name: 'Tel Aviv', subtext: 'Mossad/IDF', lat: 32.07, lon: 34.78, keywords: ['israel', 'israeli', 'gaza', 'hamas', 'idf', 'netanyahu', 'mossad'] },
-            { id: 'pyongyang', name: 'Pyongyang', subtext: 'DPRK Watch', lat: 39.03, lon: 125.75, keywords: ['north korea', 'kim jong', 'pyongyang', 'dprk', 'korean missile'] },
-            { id: 'london', name: 'London', subtext: 'GCHQ/MI6', lat: 51.5, lon: -0.12, keywords: ['uk', 'britain', 'british', 'mi6', 'gchq', 'london'] },
-            { id: 'brussels', name: 'Brussels', subtext: 'NATO HQ', lat: 50.85, lon: 4.35, keywords: ['nato', 'eu', 'european union', 'brussels'] },
-            // NEW: Venezuela & Greenland situations
-            { id: 'caracas', name: 'Caracas', subtext: 'Venezuela Crisis', lat: 10.5, lon: -66.9, keywords: ['venezuela', 'maduro', 'caracas', 'guaido', 'venezuelan', 'pdvsa'] },
-            { id: 'greenland', name: 'Nuuk', subtext: 'Arctic Dispute', lat: 64.18, lon: -51.7, keywords: ['greenland', 'denmark', 'arctic', 'nuuk', 'thule', 'rare earth'] }
+            {
+                id: 'dc', name: 'DC', subtext: 'Pentagon Pizza Index', lat: 38.9, lon: -77.0,
+                keywords: ['pentagon', 'white house', 'washington', 'us military', 'cia', 'nsa', 'biden', 'trump'],
+                description: 'US national security hub. Pentagon, CIA, NSA, State Dept. Monitor for late-night activity spikes.',
+                agencies: ['Pentagon', 'CIA', 'NSA', 'State Dept'],
+                status: 'Active monitoring'
+            },
+            {
+                id: 'moscow', name: 'Moscow', subtext: 'Kremlin Activity', lat: 55.75, lon: 37.6,
+                keywords: ['russia', 'putin', 'kremlin', 'moscow', 'russian'],
+                description: 'Russian political and military command center. FSB, GRU, Presidential Administration.',
+                agencies: ['FSB', 'GRU', 'SVR', 'Kremlin'],
+                status: 'High activity'
+            },
+            {
+                id: 'beijing', name: 'Beijing', subtext: 'PLA/MSS Activity', lat: 39.9, lon: 116.4,
+                keywords: ['china', 'beijing', 'chinese', 'xi jinping', 'taiwan strait', 'pla'],
+                description: 'Chinese Communist Party headquarters. PLA command, MSS intelligence operations.',
+                agencies: ['PLA', 'MSS', 'CCP Politburo'],
+                status: 'Elevated posture'
+            },
+            {
+                id: 'kyiv', name: 'Kyiv', subtext: 'Conflict Zone', lat: 50.45, lon: 30.5,
+                keywords: ['ukraine', 'kyiv', 'zelensky', 'ukrainian', 'donbas', 'crimea'],
+                description: 'Ukrainian capital under wartime conditions. Government, military coordination center.',
+                agencies: ['SBU', 'GUR', 'Armed Forces'],
+                status: 'Active conflict'
+            },
+            {
+                id: 'taipei', name: 'Taipei', subtext: 'Strait Watch', lat: 25.03, lon: 121.5,
+                keywords: ['taiwan', 'taipei', 'taiwanese', 'strait'],
+                description: 'Taiwan government and military HQ. ADIZ violations and PLA exercises tracked.',
+                agencies: ['NSB', 'MND', 'AIT'],
+                status: 'Heightened alert'
+            },
+            {
+                id: 'tehran', name: 'Tehran', subtext: 'IRGC Activity', lat: 35.7, lon: 51.4,
+                keywords: ['iran', 'tehran', 'iranian', 'irgc', 'hezbollah', 'nuclear'],
+                description: 'Iranian regime center. IRGC Quds Force, nuclear program oversight, proxy coordination.',
+                agencies: ['IRGC', 'MOIS', 'AEOI'],
+                status: 'Proxy operations active'
+            },
+            {
+                id: 'jerusalem', name: 'Tel Aviv', subtext: 'Mossad/IDF', lat: 32.07, lon: 34.78,
+                keywords: ['israel', 'israeli', 'gaza', 'hamas', 'idf', 'netanyahu', 'mossad'],
+                description: 'Israeli security apparatus. IDF operations, Mossad intel, Shin Bet domestic security.',
+                agencies: ['Mossad', 'IDF', 'Shin Bet', 'Aman'],
+                status: 'Active operations'
+            },
+            {
+                id: 'pyongyang', name: 'Pyongyang', subtext: 'DPRK Watch', lat: 39.03, lon: 125.75,
+                keywords: ['north korea', 'kim jong', 'pyongyang', 'dprk', 'korean missile'],
+                description: 'North Korean leadership compound. Nuclear/missile program, regime stability indicators.',
+                agencies: ['RGB', 'KPA', 'SSD'],
+                status: 'Missile tests ongoing'
+            },
+            {
+                id: 'london', name: 'London', subtext: 'GCHQ/MI6', lat: 51.5, lon: -0.12,
+                keywords: ['uk', 'britain', 'british', 'mi6', 'gchq', 'london'],
+                description: 'UK intelligence community hub. Five Eyes partner, SIGINT, foreign intelligence.',
+                agencies: ['MI6', 'GCHQ', 'MI5'],
+                status: 'Normal operations'
+            },
+            {
+                id: 'brussels', name: 'Brussels', subtext: 'NATO HQ', lat: 50.85, lon: 4.35,
+                keywords: ['nato', 'eu', 'european union', 'brussels'],
+                description: 'NATO headquarters and EU institutions. Alliance coordination, Article 5 readiness.',
+                agencies: ['NATO', 'EU Commission', 'EEAS'],
+                status: 'Enhanced readiness'
+            },
+            {
+                id: 'caracas', name: 'Caracas', subtext: 'Venezuela Crisis', lat: 10.5, lon: -66.9,
+                keywords: ['venezuela', 'maduro', 'caracas', 'guaido', 'venezuelan', 'pdvsa'],
+                description: 'Venezuelan political crisis center. Maduro regime, opposition movements, oil politics.',
+                agencies: ['SEBIN', 'DGCIM', 'GNB'],
+                status: 'Political instability'
+            },
+            {
+                id: 'greenland', name: 'Nuuk', subtext: 'Arctic Dispute', lat: 64.18, lon: -51.7,
+                keywords: ['greenland', 'denmark', 'arctic', 'nuuk', 'thule', 'rare earth'],
+                description: 'Arctic strategic territory. US military presence, rare earth minerals, sovereignty questions.',
+                agencies: ['Danish Defence', 'US Space Force', 'Arctic Council'],
+                status: 'Diplomatic tensions'
+            }
         ];
 
         // Shipping chokepoints for supply chain monitoring
@@ -4551,12 +4891,23 @@
                 id: 'ukraine',
                 name: 'Ukraine Conflict',
                 intensity: 'high',
-                // Approximate frontline coordinates (simplified polygon)
                 coords: [
                     [37.5, 47.0], [38.5, 47.5], [39.0, 48.5], [38.0, 49.5],
                     [37.0, 49.0], [36.0, 48.5], [35.5, 47.5], [36.5, 47.0]
                 ],
-                labelPos: { lat: 48.0, lon: 37.5 }
+                labelPos: { lat: 48.0, lon: 37.5 },
+                startDate: 'Feb 24, 2022',
+                parties: ['Russia', 'Ukraine', 'NATO (support)'],
+                casualties: '500,000+ (est.)',
+                displaced: '6.5M+ refugees',
+                description: 'Full-scale Russian invasion of Ukraine. Active frontlines in Donetsk, Luhansk, Zaporizhzhia, and Kherson oblasts. Heavy artillery, drone warfare, and trench combat.',
+                keyEvents: [
+                    'Battle of Bakhmut',
+                    'Kursk incursion',
+                    'Black Sea drone strikes',
+                    'Infrastructure attacks'
+                ],
+                keywords: ['ukraine', 'russia', 'zelensky', 'putin', 'donbas', 'crimea', 'bakhmut', 'kursk']
             },
             {
                 id: 'gaza',
@@ -4565,7 +4916,19 @@
                 coords: [
                     [34.2, 31.6], [34.6, 31.6], [34.6, 31.2], [34.2, 31.2]
                 ],
-                labelPos: { lat: 31.4, lon: 34.4 }
+                labelPos: { lat: 31.4, lon: 34.4 },
+                startDate: 'Oct 7, 2023',
+                parties: ['Israel (IDF)', 'Hamas', 'Palestinian Islamic Jihad'],
+                casualties: '45,000+ (Gaza), 1,200+ (Israel)',
+                displaced: '2M+ internally displaced',
+                description: 'Israeli military operation in Gaza following Oct 7 Hamas attacks. Urban warfare, humanitarian crisis, regional escalation with Hezbollah and Houthis.',
+                keyEvents: [
+                    'Oct 7 attacks',
+                    'Ground invasion',
+                    'Rafah operation',
+                    'Hostage negotiations'
+                ],
+                keywords: ['gaza', 'israel', 'hamas', 'idf', 'netanyahu', 'hostage', 'rafah', 'hezbollah']
             },
             {
                 id: 'sudan',
@@ -4575,7 +4938,19 @@
                     [32.0, 16.0], [34.0, 16.5], [35.0, 15.0], [33.5, 13.5],
                     [31.5, 14.0], [31.0, 15.5]
                 ],
-                labelPos: { lat: 15.0, lon: 32.5 }
+                labelPos: { lat: 15.0, lon: 32.5 },
+                startDate: 'Apr 15, 2023',
+                parties: ['Sudanese Armed Forces (SAF)', 'Rapid Support Forces (RSF)'],
+                casualties: '15,000+ killed',
+                displaced: '10M+ displaced',
+                description: 'Power struggle between SAF and RSF paramilitary. Fighting centered around Khartoum, Darfur. Major humanitarian catastrophe with famine conditions.',
+                keyEvents: [
+                    'Khartoum battle',
+                    'Darfur massacres',
+                    'El Fasher siege',
+                    'Famine declared'
+                ],
+                keywords: ['sudan', 'khartoum', 'rsf', 'darfur', 'burhan', 'hemedti']
             },
             {
                 id: 'myanmar',
@@ -4584,7 +4959,19 @@
                 coords: [
                     [96.0, 22.0], [98.0, 23.0], [98.5, 21.0], [97.0, 19.5], [95.5, 20.5]
                 ],
-                labelPos: { lat: 21.0, lon: 96.5 }
+                labelPos: { lat: 21.0, lon: 96.5 },
+                startDate: 'Feb 1, 2021',
+                parties: ['Military Junta (SAC)', 'Ethnic Armed Organizations', 'People\'s Defense Forces'],
+                casualties: '50,000+ (est.)',
+                displaced: '3M+ internally displaced',
+                description: 'Armed resistance following 2021 military coup. Multiple ethnic armies and pro-democracy forces fighting junta. Recent rebel advances in border regions.',
+                keyEvents: [
+                    'Operation 1027',
+                    'Lashio capture',
+                    'Myawaddy offensive',
+                    'Junta conscription'
+                ],
+                keywords: ['myanmar', 'burma', 'junta', 'arakan', 'karen', 'kachin']
             },
             {
                 id: 'taiwan_strait',
@@ -4593,7 +4980,19 @@
                 coords: [
                     [119.0, 26.0], [121.5, 26.0], [121.5, 22.5], [119.0, 22.5]
                 ],
-                labelPos: { lat: 24.5, lon: 120.0 }
+                labelPos: { lat: 24.5, lon: 120.0 },
+                startDate: 'Ongoing tensions',
+                parties: ['China (PLA)', 'Taiwan (ROC)', 'United States (deterrence)'],
+                casualties: 'N/A - no active combat',
+                displaced: 'N/A',
+                description: 'Heightened tensions over Taiwan sovereignty. Regular PLA exercises, airspace incursions, naval activity. Risk of flashpoint escalation.',
+                keyEvents: [
+                    'PLA exercises',
+                    'ADIZ incursions',
+                    'US arms sales',
+                    'Diplomatic tensions'
+                ],
+                keywords: ['taiwan', 'china', 'strait', 'pla', 'tsai', 'invasion']
             }
         ];
 
@@ -4783,6 +5182,9 @@
 
         // Render the global map - Situation Room Style with accurate borders
         async function renderGlobalMap(activityData, earthquakes = [], allNews = []) {
+            // Cache allNews for popup access
+            window.cachedAllNews = allNews;
+
             const panel = document.getElementById('mapPanel');
             const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
 
@@ -4800,6 +5202,7 @@
                         <button class="map-zoom-btn map-zoom-reset" onclick="mapZoomReset()" title="Reset">RST</button>
                     </div>
                     <div class="map-pan-hint" id="mapPanHint">DRAG TO PAN</div>
+                    <div class="conflict-popup" id="conflictPopup"></div>
                     <div class="map-corner-label tl">GLOBAL ACTIVITY MONITOR</div>
                     <div class="map-corner-label tr">CLASSIFICATION: OPEN SOURCE</div>
                     <div class="map-corner-label bl">⚓ SHIP | ☢ NUKES | ▪ BASES | ═ CABLES</div>
@@ -5003,8 +5406,14 @@
                 CONFLICT_ZONES.forEach(zone => {
                     const pos = toPercent(zone.labelPos.lon, zone.labelPos.lat);
                     const intensityClass = zone.intensity === 'high' ? 'high-intensity' : '';
+                    // Store zone data for popup
+                    const zoneData = encodeURIComponent(JSON.stringify(zone));
                     overlaysHTML += `
-                        <div class="conflict-zone-label ${intensityClass}" style="left: ${pos.x}%; top: ${pos.y}%;">
+                        <div class="conflict-zone-label ${intensityClass}"
+                             style="left: ${pos.x}%; top: ${pos.y}%;"
+                             data-conflict-id="${zone.id}"
+                             data-conflict-info="${zoneData}"
+                             onclick="showConflictPopup(event, '${zone.id}')">
                             ${zone.name}
                         </div>
                     `;
@@ -5129,13 +5538,16 @@
             INTEL_HOTSPOTS.forEach(spot => {
                 const activity = activityData[spot.id] || { level: 'low', score: 0, headlines: [] };
                 const pos = toPercent(spot.lon, spot.lat);
-                // Store activity data as JSON in data attribute
+                // Store activity data as JSON in data attribute (including new detailed info)
                 const activityJson = encodeURIComponent(JSON.stringify({
                     ...activity,
                     name: spot.name,
                     subtext: spot.subtext,
                     lat: spot.lat,
-                    lon: spot.lon
+                    lon: spot.lon,
+                    description: spot.description || '',
+                    agencies: spot.agencies || [],
+                    status: spot.status || ''
                 }));
 
                 // Add breaking news pulse for high activity hotspots
@@ -5246,6 +5658,9 @@
                 if (!e.target.closest('.custom-hotspot') && !e.target.closest('.custom-hotspot-popup')) {
                     hideCustomHotspotPopup();
                 }
+                if (!e.target.closest('.conflict-zone-label') && !e.target.closest('.conflict-popup')) {
+                    hideConflictPopup();
+                }
             });
         }
 
@@ -5278,6 +5693,17 @@
                 headlinesHTML = '<div class="hotspot-popup-empty">No recent headlines for this location</div>';
             }
 
+            // Build agencies HTML if available
+            let agenciesHTML = '';
+            if (activityData.agencies && activityData.agencies.length > 0) {
+                agenciesHTML = `
+                    <div class="hotspot-popup-agencies">
+                        <div class="hotspot-popup-agencies-title">Key Entities</div>
+                        ${activityData.agencies.map(a => `<span class="hotspot-popup-agency">${escapeHtml(a)}</span>`).join('')}
+                    </div>
+                `;
+            }
+
             // Build popup content
             popup.innerHTML = `
                 <button class="hotspot-popup-close" onclick="hideHotspotPopup()">&times;</button>
@@ -5286,7 +5712,21 @@
                     <span class="hotspot-popup-level ${activityData.level}">${activityData.level.toUpperCase()}</span>
                 </div>
                 <div class="hotspot-popup-subtext">${escapeHtml(activityData.subtext)}</div>
-                <div class="hotspot-popup-coords">${activityData.lat.toFixed(2)}°${activityData.lat >= 0 ? 'N' : 'S'}, ${Math.abs(activityData.lon).toFixed(2)}°${activityData.lon >= 0 ? 'E' : 'W'}</div>
+                ${activityData.description ? `<div class="hotspot-popup-desc">${escapeHtml(activityData.description)}</div>` : ''}
+                <div class="hotspot-popup-meta">
+                    <div class="hotspot-popup-meta-item">
+                        <span class="hotspot-popup-meta-label">Coordinates</span>
+                        <span class="hotspot-popup-meta-value">${activityData.lat.toFixed(2)}°${activityData.lat >= 0 ? 'N' : 'S'}, ${Math.abs(activityData.lon).toFixed(2)}°${activityData.lon >= 0 ? 'E' : 'W'}</span>
+                    </div>
+                    ${activityData.status ? `
+                    <div class="hotspot-popup-meta-item">
+                        <span class="hotspot-popup-meta-label">Status</span>
+                        <span class="hotspot-popup-meta-value">${escapeHtml(activityData.status)}</span>
+                    </div>
+                    ` : ''}
+                </div>
+                ${agenciesHTML}
+                ${headlinesHTML.includes('hotspot-popup-headline') ? '<div class="hotspot-popup-headlines-title">Related Headlines</div>' : ''}
                 <div class="hotspot-popup-headlines">
                     ${headlinesHTML}
                 </div>
@@ -5305,8 +5745,8 @@
             let top = hotspotRect.top - mapRect.top - 10;
 
             // Ensure popup stays within map bounds
-            const popupWidth = 300;
-            const popupHeight = 280;
+            const popupWidth = 320;
+            const popupHeight = 400;
 
             if (left + popupWidth > mapRect.width) {
                 left = hotspotRect.left - mapRect.left - popupWidth - 20;
@@ -5324,6 +5764,119 @@
         // Hide hotspot popup
         function hideHotspotPopup() {
             const popup = document.getElementById('hotspotPopup');
+            if (popup) {
+                popup.classList.remove('visible');
+            }
+        }
+
+        // Show conflict zone popup
+        function showConflictPopup(event, conflictId) {
+            event.stopPropagation();
+
+            const conflictEl = document.querySelector(`[data-conflict-id="${conflictId}"]`);
+            if (!conflictEl) return;
+
+            // Hide other popups
+            hideHotspotPopup();
+            hideChokepointPopup();
+            hideQuakePopup();
+            hideCyberPopup();
+            hideCustomHotspotPopup();
+
+            const conflictData = JSON.parse(decodeURIComponent(conflictEl.dataset.conflictInfo));
+            const popup = document.getElementById('conflictPopup');
+
+            // Find matching headlines from cachedNews
+            let matchedHeadlines = [];
+            if (window.cachedAllNews && conflictData.keywords) {
+                matchedHeadlines = window.cachedAllNews.filter(item => {
+                    const title = (item.title || '').toLowerCase();
+                    return conflictData.keywords.some(kw => title.includes(kw.toLowerCase()));
+                }).slice(0, 5);
+            }
+
+            // Build headlines HTML
+            let headlinesHTML = '';
+            if (matchedHeadlines.length > 0) {
+                headlinesHTML = `
+                    <div class="conflict-popup-headlines-title">Related Headlines</div>
+                    <div class="conflict-popup-headlines">
+                        ${matchedHeadlines.map(h => `
+                            <div class="conflict-popup-headline">
+                                <div class="conflict-popup-headline-source">${escapeHtml(h.source || 'News')}</div>
+                                <a href="${h.link || '#'}" target="_blank">${escapeHtml(h.title)}</a>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Build popup content
+            popup.innerHTML = `
+                <button class="conflict-popup-close" onclick="hideConflictPopup()">&times;</button>
+                <div class="conflict-popup-header">
+                    <span class="conflict-popup-title">${escapeHtml(conflictData.name)}</span>
+                    <span class="conflict-popup-intensity ${conflictData.intensity}">${conflictData.intensity.toUpperCase()}</span>
+                </div>
+                <div class="conflict-popup-meta">
+                    <div class="conflict-popup-meta-item">
+                        <span class="conflict-popup-meta-label">Start Date</span>
+                        <span class="conflict-popup-meta-value">${escapeHtml(conflictData.startDate)}</span>
+                    </div>
+                    <div class="conflict-popup-meta-item">
+                        <span class="conflict-popup-meta-label">Casualties</span>
+                        <span class="conflict-popup-meta-value">${escapeHtml(conflictData.casualties)}</span>
+                    </div>
+                    <div class="conflict-popup-meta-item">
+                        <span class="conflict-popup-meta-label">Displaced</span>
+                        <span class="conflict-popup-meta-value">${escapeHtml(conflictData.displaced)}</span>
+                    </div>
+                    <div class="conflict-popup-meta-item">
+                        <span class="conflict-popup-meta-label">Location</span>
+                        <span class="conflict-popup-meta-value">${conflictData.labelPos.lat.toFixed(1)}°N, ${conflictData.labelPos.lon.toFixed(1)}°E</span>
+                    </div>
+                </div>
+                <div class="conflict-popup-desc">${escapeHtml(conflictData.description)}</div>
+                <div class="conflict-popup-parties">
+                    <div class="conflict-popup-parties-title">Belligerents</div>
+                    ${conflictData.parties.map(p => `<span class="conflict-popup-party">${escapeHtml(p)}</span>`).join('')}
+                </div>
+                <div class="conflict-popup-events">
+                    <div class="conflict-popup-events-title">Key Developments</div>
+                    ${conflictData.keyEvents.map(e => `<div class="conflict-popup-event">${escapeHtml(e)}</div>`).join('')}
+                </div>
+                ${headlinesHTML}
+            `;
+
+            // Position popup
+            popup.classList.add('visible');
+
+            const conflictRect = conflictEl.getBoundingClientRect();
+            const mapContainer = document.getElementById('worldMapContainer');
+            const mapRect = mapContainer.getBoundingClientRect();
+
+            let left = conflictRect.left - mapRect.left + 20;
+            let top = conflictRect.top - mapRect.top - 10;
+
+            const popupWidth = 380;
+            const popupHeight = 450;
+
+            if (left + popupWidth > mapRect.width) {
+                left = conflictRect.left - mapRect.left - popupWidth - 20;
+            }
+            if (top + popupHeight > mapRect.height) {
+                top = mapRect.height - popupHeight - 10;
+            }
+            if (top < 10) top = 10;
+            if (left < 10) left = 10;
+
+            popup.style.left = left + 'px';
+            popup.style.top = top + 'px';
+        }
+
+        // Hide conflict popup
+        function hideConflictPopup() {
+            const popup = document.getElementById('conflictPopup');
             if (popup) {
                 popup.classList.remove('visible');
             }
