@@ -472,11 +472,11 @@ export async function fetchLayoffs() {
 // Fetch general news from GDELT as fallback for correlation/narrative analysis
 export async function fetchGDELTNews() {
     const queries = [
-        'politics government',
-        'technology AI artificial intelligence',
-        'economy finance markets',
-        'world international',
-        'military defense security'
+        '(politics OR government OR congress)',
+        '(technology OR AI OR "artificial intelligence")',
+        '(economy OR finance OR markets)',
+        '(world OR international OR global)',
+        '(military OR defense OR security)'
     ];
 
     try {
@@ -545,13 +545,13 @@ export async function fetchIntelFeed() {
 
     // GDELT queries for intelligence-related news
     const queries = [
-        { query: 'military OR defense OR pentagon', topics: ['DEFENSE'], regions: ['US'] },
-        { query: 'intelligence OR espionage OR CIA OR NSA', topics: ['INTEL'], regions: ['US'] },
-        { query: 'cyberattack OR ransomware OR hacking', topics: ['CYBER'], regions: [] },
-        { query: 'russia ukraine war conflict', topics: ['CONFLICT'], regions: ['EUROPE'] },
-        { query: 'china taiwan military', topics: ['CONFLICT'], regions: ['APAC'] },
-        { query: 'iran nuclear sanctions', topics: ['NUCLEAR', 'DIPLO'], regions: ['MENA'] },
-        { query: 'north korea missile nuclear', topics: ['NUCLEAR'], regions: ['APAC'] }
+        { query: '(military OR defense OR pentagon)', topics: ['DEFENSE'], regions: ['US'] },
+        { query: '(intelligence OR espionage OR CIA)', topics: ['INTEL'], regions: ['US'] },
+        { query: '(cyberattack OR ransomware OR hacking)', topics: ['CYBER'], regions: [] },
+        { query: '(russia ukraine war)', topics: ['CONFLICT'], regions: ['EUROPE'] },
+        { query: '(china taiwan military)', topics: ['CONFLICT'], regions: ['APAC'] },
+        { query: '(iran nuclear sanctions)', topics: ['NUCLEAR', 'DIPLO'], regions: ['MENA'] },
+        { query: '(north korea missile)', topics: ['NUCLEAR'], regions: ['APAC'] }
     ];
 
     try {
