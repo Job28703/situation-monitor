@@ -153,10 +153,7 @@ function extractTag(xml, tagName) {
 function extractAtomLink(entry) {
     // Look for link with rel="alternate" or no rel (default)
     const linkMatch = entry.match(/<link[^>]*href=["']([^"']+)["'][^>]*>/i);
-    if (linkMatch) {
-        return linkMatch[1];
-    }
-    return extractTag(entry, 'link');
+    return linkMatch ? linkMatch[1] : extractTag(entry, 'link');
 }
 
 // Decode common HTML entities
@@ -179,10 +176,7 @@ function isRssFeed(contentType, body) {
         return true;
     }
     // Check body for RSS/Atom markers
-    if (body && (body.includes('<rss') || body.includes('<feed') || body.includes('<channel'))) {
-        return true;
-    }
-    return false;
+    return body && (body.includes('<rss') || body.includes('<feed') || body.includes('<channel'));
 }
 
 // Add CORS headers to response
@@ -210,7 +204,7 @@ function isAllowedOrigin(targetUrl) {
 }
 
 export default {
-    async fetch(request, env, ctx) {
+    async fetch(request, _env, ctx) {
         const url = new URL(request.url);
         const origin = request.headers.get('Origin') || '*';
 

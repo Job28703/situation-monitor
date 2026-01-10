@@ -69,25 +69,23 @@ export function renderHeatmap(sectors) {
         return;
     }
 
-    panel.innerHTML = '<div class="heatmap">' + sectors.map(s => {
-        let colorClass = 'up-0';
-        const c = s.change;
-        if (c >= 2) colorClass = 'up-3';
-        else if (c >= 1) colorClass = 'up-2';
-        else if (c >= 0.5) colorClass = 'up-1';
-        else if (c >= 0) colorClass = 'up-0';
-        else if (c >= -0.5) colorClass = 'down-0';
-        else if (c >= -1) colorClass = 'down-1';
-        else if (c >= -2) colorClass = 'down-2';
-        else colorClass = 'down-3';
+    const getColorClass = (change) => {
+        if (change >= 2) return 'up-3';
+        if (change >= 1) return 'up-2';
+        if (change >= 0.5) return 'up-1';
+        if (change >= 0) return 'up-0';
+        if (change >= -0.5) return 'down-0';
+        if (change >= -1) return 'down-1';
+        if (change >= -2) return 'down-2';
+        return 'down-3';
+    };
 
-        return `
-            <div class="heatmap-cell ${colorClass}">
-                <div class="sector-name">${s.name}</div>
-                <div class="sector-change">${s.change >= 0 ? '+' : ''}${s.change.toFixed(2)}%</div>
-            </div>
-        `;
-    }).join('') + '</div>';
+    panel.innerHTML = '<div class="heatmap">' + sectors.map(s => `
+        <div class="heatmap-cell ${getColorClass(s.change)}">
+            <div class="sector-name">${s.name}</div>
+            <div class="sector-change">${s.change >= 0 ? '+' : ''}${s.change.toFixed(2)}%</div>
+        </div>
+    `).join('') + '</div>';
 }
 
 // Render commodities
@@ -131,12 +129,11 @@ export function renderPolymarket(markets) {
     }
 
     const formatVolume = (v) => {
-        // Handle pre-formatted strings (e.g., '2.4M')
         if (typeof v === 'string') return '$' + v;
-        // Handle numeric values
-        if (v >= 1000000) return '$' + (v / 1000000).toFixed(1) + 'M';
-        if (v >= 1000) return '$' + (v / 1000).toFixed(0) + 'K';
-        return '$' + (v || 0).toFixed(0);
+        if (!v) return '$0';
+        if (v >= 1e6) return '$' + (v / 1e6).toFixed(1) + 'M';
+        if (v >= 1e3) return '$' + (v / 1e3).toFixed(0) + 'K';
+        return '$' + v.toFixed(0);
     };
 
     panel.innerHTML = markets.map(m => `
@@ -360,30 +357,22 @@ export function renderIntelFeed(items) {
 
     count.textContent = items.length;
 
+    const buildTags = (item) => {
+        const tags = [];
+        if (item.sourceType === 'osint') tags.push('<span class="intel-tag osint">OSINT</span>');
+        else if (item.sourceType === 'govt') tags.push('<span class="intel-tag govt">GOVT</span>');
+        tags.push(...item.regions.slice(0, 2).map(r => `<span class="intel-tag region">${r}</span>`));
+        tags.push(...item.topics.slice(0, 2).map(t => `<span class="intel-tag topic">${t}</span>`));
+        return tags.join('');
+    };
+
     panel.innerHTML = items.map(item => {
-        let tagsHTML = '';
-
-        if (item.sourceType === 'osint') {
-            tagsHTML += '<span class="intel-tag osint">OSINT</span>';
-        } else if (item.sourceType === 'govt') {
-            tagsHTML += '<span class="intel-tag govt">GOVT</span>';
-        }
-
-        item.regions.slice(0, 2).forEach(r => {
-            tagsHTML += `<span class="intel-tag region">${r}</span>`;
-        });
-
-        item.topics.slice(0, 2).forEach(t => {
-            tagsHTML += `<span class="intel-tag topic">${t}</span>`;
-        });
-
         const timeAgoStr = item.pubDate ? getRelativeTime(new Date(item.pubDate)) : '';
-
         return `
             <div class="intel-item ${item.isPriority ? 'priority' : ''}">
                 <div class="intel-header">
                     <span class="intel-source">${item.source}</span>
-                    <div class="intel-tags">${tagsHTML}</div>
+                    <div class="intel-tags">${buildTags(item)}</div>
                 </div>
                 <a href="${item.link}" target="_blank" class="intel-title">${item.title}</a>
                 <div class="intel-meta">

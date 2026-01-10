@@ -48,7 +48,7 @@ export function hasAlertKeyword(title) {
 export async function fetchFeed(source) {
     // Try Worker RSS-to-JSON first
     const jsonResult = await fetchFeedViaJson(source);
-    if (jsonResult !== null && jsonResult.length > 0) {
+    if (jsonResult?.length > 0) {
         return jsonResult;
     }
 
@@ -228,7 +228,7 @@ export async function fetchMarkets() {
     };
 
     const stockResults = await Promise.all(symbols.map(fetchStock));
-    stockResults.forEach(r => { if (r) markets.push(r); });
+    markets.push(...stockResults.filter(Boolean));
 
     // Crypto - now uses ServiceClient with caching and circuit breaker
     try {
@@ -330,30 +330,29 @@ export async function fetchGovContracts() {
 
 // Fetch AI news from major AI companies - using Cloudflare Worker
 export async function fetchAINews() {
-    const results = await Promise.all(AI_FEEDS.map(async (source) => {
-        // Use Cloudflare Worker with RSS-to-JSON parsing
-        try {
-            const proxyUrl = `${WORKER_URL}/?url=${encodeURIComponent(source.url)}&format=json`;
-            const response = await fetch(proxyUrl);
+    const fetchAIFeed = async (source) => {
+        const proxyUrl = `${WORKER_URL}/?url=${encodeURIComponent(source.url)}&format=json`;
+        const response = await fetch(proxyUrl);
 
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        if (!response.ok) return [];
 
-            const data = await response.json();
-            if (data.status === 'ok' && data.items) {
-                return data.items.slice(0, 3).map(item => ({
-                    source: source.name,
-                    title: (item.title || 'No title').trim(),
-                    link: item.link || '',
-                    date: item.pubDate || ''
-                }));
-            }
-        } catch (e) {
-            console.log(`Failed to fetch ${source.name}`);
-            return [];
-        }
-    }));
+        const data = await response.json();
+        if (data.status !== 'ok' || !data.items) return [];
 
-    return results.flat().sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 15);
+        return data.items.slice(0, 3).map(item => ({
+            source: source.name,
+            title: (item.title || 'No title').trim(),
+            link: item.link || '',
+            date: item.pubDate || ''
+        }));
+    };
+
+    const results = await Promise.allSettled(AI_FEEDS.map(fetchAIFeed));
+    const items = results
+        .filter(r => r.status === 'fulfilled')
+        .flatMap(r => r.value);
+
+    return items.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 15);
 }
 
 // Fetch Fed balance sheet from FRED - routed through CORS proxy
@@ -479,30 +478,22 @@ export async function fetchGDELTNews() {
         '(military OR defense OR security)'
     ];
 
-    try {
-        const results = await Promise.allSettled(
-            queries.map(query => fetchGDELTQuery(query, 10))
-        );
+    const results = await Promise.allSettled(
+        queries.map(query => fetchGDELTQuery(query, 10))
+    );
 
-        const items = [];
-        results.forEach(result => {
-            if (result.status === 'fulfilled' && result.value) {
-                items.push(...result.value);
-            }
-        });
+    const items = results
+        .filter(r => r.status === 'fulfilled' && r.value)
+        .flatMap(r => r.value);
 
-        // Remove duplicates
-        const seen = new Set();
-        return items.filter(item => {
-            const key = item.title.toLowerCase().substring(0, 50);
-            if (seen.has(key)) return false;
-            seen.add(key);
-            return true;
-        }).slice(0, 50);
-    } catch (error) {
-        console.error('Error fetching GDELT news:', error);
-        return [];
-    }
+    // Remove duplicates by title prefix
+    const seen = new Set();
+    return items.filter(item => {
+        const key = item.title.toLowerCase().substring(0, 50);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    }).slice(0, 50);
 }
 
 // Fetch situation-specific news using GDELT - now with ServiceClient
@@ -517,9 +508,7 @@ export async function fetchSituationNews(keywords, limit = 10) {
 
 // Fetch Intel feed using GDELT API - now with ServiceClient
 export async function fetchIntelFeed() {
-    const items = [];
-
-    // GDELT queries for intelligence-related news (parentheses only around OR terms)
+    // GDELT queries for intelligence-related news
     const queries = [
         { query: '(military OR defense OR pentagon)', topics: ['DEFENSE'], regions: ['US'] },
         { query: '(intelligence OR espionage OR CIA)', topics: ['INTEL'], regions: ['US'] },
@@ -530,65 +519,49 @@ export async function fetchIntelFeed() {
         { query: '"north korea" (missile OR nuclear)', topics: ['NUCLEAR'], regions: ['APAC'] }
     ];
 
-    try {
-        // Fetch from multiple GDELT queries in parallel
-        const results = await Promise.allSettled(
-            queries.map(async ({ query, topics, regions }) => {
-                try {
-                    const result = await serviceClient.request('GDELT', '/api/v2/doc/doc', {
-                        params: {
-                            query: query,
-                            mode: 'artlist',
-                            maxrecords: 5,
-                            format: 'json',
-                            sort: 'date'
-                        }
-                    });
-
-                    return (result.data.articles || []).map(article => ({
-                        source: article.domain || 'Unknown',
-                        sourceType: article.domain?.includes('.gov') ? 'govt' :
-                                   article.domain?.includes('bellingcat') ? 'osint' : 'news',
-                        title: article.title || '',
-                        link: article.url || '',
-                        pubDate: article.seendate || '',
-                        isAlert: ALERT_KEYWORDS.some(kw => (article.title || '').toLowerCase().includes(kw)),
-                        regions: regions,
-                        topics: topics
-                    }));
-                } catch (e) {
-                    return [];
-                }
-            })
-        );
-
-        results.forEach(result => {
-            if (result.status === 'fulfilled' && result.value) {
-                items.push(...result.value);
-            }
+    const fetchIntelQuery = async ({ query, topics, regions }) => {
+        const result = await serviceClient.request('GDELT', '/api/v2/doc/doc', {
+            params: { query, mode: 'artlist', maxrecords: 5, format: 'json', sort: 'date' }
         });
 
-        // Remove duplicates by title
-        const seen = new Set();
-        const unique = items.filter(item => {
-            const key = item.title.toLowerCase().substring(0, 50);
-            if (seen.has(key)) return false;
-            seen.add(key);
-            return true;
+        return (result.data.articles || []).map(article => {
+            const domain = article.domain || '';
+            const sourceType = domain.includes('.gov') ? 'govt' :
+                              domain.includes('bellingcat') ? 'osint' : 'news';
+            return {
+                source: domain || 'Unknown',
+                sourceType,
+                title: article.title || '',
+                link: article.url || '',
+                pubDate: article.seendate || '',
+                isAlert: ALERT_KEYWORDS.some(kw => (article.title || '').toLowerCase().includes(kw)),
+                regions,
+                topics
+            };
         });
+    };
 
-        // Sort by date and alert status
-        unique.sort((a, b) => {
-            if (a.isAlert && !b.isAlert) return -1;
-            if (!a.isAlert && b.isAlert) return 1;
-            return new Date(b.pubDate) - new Date(a.pubDate);
-        });
+    const results = await Promise.allSettled(queries.map(fetchIntelQuery));
+    const items = results
+        .filter(r => r.status === 'fulfilled')
+        .flatMap(r => r.value);
 
-        return unique.slice(0, 30);
-    } catch (error) {
-        console.error('Error fetching intel feed:', error);
-        return [];
-    }
+    // Remove duplicates by title prefix
+    const seen = new Set();
+    const unique = items.filter(item => {
+        const key = item.title.toLowerCase().substring(0, 50);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+
+    // Sort by alert status then date
+    unique.sort((a, b) => {
+        if (a.isAlert !== b.isAlert) return a.isAlert ? -1 : 1;
+        return new Date(b.pubDate) - new Date(a.pubDate);
+    });
+
+    return unique.slice(0, 30);
 }
 
 // Export serviceClient health status for debugging

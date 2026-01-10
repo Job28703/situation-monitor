@@ -122,7 +122,7 @@ export class ServiceRegistry {
      * Check if a service is registered
      */
     static has(serviceId) {
-        return serviceId in SERVICE_CONFIG;
+        return Object.hasOwn(SERVICE_CONFIG, serviceId);
     }
 
     /**
